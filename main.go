@@ -43,19 +43,19 @@ func main() {
     // only one arg or more than 2 arguments
     args := os.Args
     if len(args) != 3 {
-        fmt.Println("error: wrong number of arguments: Repeat requires Task No and time arguments\n", args)
+        fmt.Println("\033[7;31merror: wrong number of arguments: Repeat requires Task No and time arguments\n", args)
         return
     }
     // task no regex check
     tasknorgx := regexp.MustCompile(`\d*`)
     tasknorgxindex := tasknorgx.FindStringIndex(args[1])
     if tasknorgxindex == nil {
-        fmt.Println("error: task no is not recognized:\n", args[1])
+        fmt.Println("\033[7;31merror: task no is not recognized:\n", args[1])
     }
     // check if duration exists in the map
     if _,ok := Reptimes[args[2]]; !ok {
-        fmt.Println("error: time argument is not correct:\n", args[2])
-        fmt.Println("should be one of:")
+        fmt.Println("\033[7;31merror: time argument is not correct:\n", args[2])
+        fmt.Println("\033[7;0mshould be one of:")
         for k := range Reptimes {
             fmt.Print(k, " ")
         }
@@ -63,8 +63,8 @@ func main() {
     }
 
     // app := os.Args[0]
-    taskno := os.Args[1]
-    reptime := os.Args[2]
+    taskno := args[1]
+    reptime := args[2]
 
     // get current time
     currentTime := time.Now()
@@ -73,7 +73,7 @@ func main() {
     cmd := exec.Command("task", "_get", taskno + ".tags.OVERDUE")
     output, err := cmd.Output()
     if err != nil {
-        fmt.Println(err)          
+        fmt.Println("\033[7;31merror:", err)          
     }
     isoverdue := false
     if len(output) > 1 {isoverdue = true }
@@ -82,23 +82,23 @@ func main() {
     cmd = exec.Command("task", "_get", taskno + ".due")
     output, err = cmd.Output()
     if err != nil {
-        fmt.Println(err)          
+        fmt.Println("\033[7;31merror:", err)          
     }   
     duedate,err := time.Parse("2006-01-02T15:04:05", strings.TrimSpace(string((output))))
     if err != nil {
-        fmt.Println(err)          
+        fmt.Println("\033[7;31merror:", err)          
     }   
     // check if due date more than 1 month to avoid accidental edits
     if (duedate.Sub(time.Now())) > time.Hour * 720 {
-        fmt.Println("WARNING: you are editing a task that is due more than 1 month later")
+        fmt.Println("\033[7;33mWARNING: you are editing a task that is due more than 1 month later")
         s := bufio.NewScanner(os.Stdin)
         fmt.Print("Do you want to continue (y/n): ")
         s.Scan()
         if s.Text() == "n" || s.Text() == "N"  {
-            fmt.Println("Task WAS NOT edited.")
+            fmt.Println("\033[7;33mTask WAS NOT edited.")
             return
         } else if !(s.Text() == "y" || s.Text() == "Y") {
-            fmt.Println("Unknown input: Task WAS NOT edited.")
+            fmt.Println("\033[7;31mUnknown input: Task WAS NOT edited.")
             return
         }
     }
@@ -122,7 +122,7 @@ func main() {
             cmd := exec.Command("task", args...)
             output, err = cmd.Output()
             if err != nil {
-                fmt.Println(err)          
+                fmt.Println("\033[7;31merror:", err)          
             }   
             fmt.Println(string(output))
         case false:
@@ -132,7 +132,7 @@ func main() {
             cmd := exec.Command("task", args...)
             output, err = cmd.Output()
             if err != nil {
-                fmt.Println(err)          
+                fmt.Println("\033[7;31merror:", err)          
             }   
             fmt.Println(string(output))
         default:
