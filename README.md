@@ -22,7 +22,7 @@ on the console.
 
 ## Commands
 - re 12 1w
-schedules task 12 1w later at 6am.
+schedules task 12 to 1w later at 6am.
 
 ## Usage
 -Available spaces times: 1d,2d,3d,5d,1w,2w,3w,1m..11m,1y..5y
@@ -42,3 +42,7 @@ schedules task 12 1w later at 6am.
 ## Concepts
 
 ## TODOs
+- add some validation for inputs: arg1:int, arg2:is from map, # of args are 2, etc. 
+- add testing
+- add a confirmation when a inactive task being edited, pending?, waiting?
+- add verifications for the args
