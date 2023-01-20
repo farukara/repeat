@@ -106,18 +106,18 @@ func main() {
     var hoursToSix string
     switch {
         case currentTime.Hour() < 6:
-            hoursToSix = "+" + strconv.Itoa(6-currentTime.Hour())
+            hoursToSix = "+" + strconv.Itoa(6-currentTime.Hour()) + "h"
         case currentTime.Hour() == 6:
             hoursToSix = ""
         case currentTime.Hour() > 6:
-            hoursToSix = "-" + strconv.Itoa(currentTime.Hour()-6)
+            hoursToSix = "-" + strconv.Itoa(currentTime.Hour()-6) + "h"
     } 
 
     
     switch isoverdue {
     // task 12 mod due:1d-4h wait:due-4h
         case true:
-            args := []string{taskno, "mod", "due:" + Reptimes[reptime][0] + hoursToSix + "h",Reptimes[reptime][1]}
+            args := []string{taskno, "mod", "due:" + Reptimes[reptime][0] + hoursToSix, Reptimes[reptime][1]}
             fmt.Println("task", args)
             cmd := exec.Command("task", args...)
             output, err = cmd.Output()
@@ -127,7 +127,7 @@ func main() {
             fmt.Println(string(output))
         case false:
             days := int(duedate.Sub(currentTime).Hours()/24)+1
-            args := []string{taskno, "mod", "due:" + Reptimes[reptime][0] + "+" + strconv.Itoa(days) + "d" + hoursToSix + "h",Reptimes[reptime][1]}
+            args := []string{taskno, "mod", "due:" + Reptimes[reptime][0] + "+" + strconv.Itoa(days) + "d" + hoursToSix,Reptimes[reptime][1]}
             fmt.Println("task", args)
             cmd := exec.Command("task", args...)
             output, err = cmd.Output()
