@@ -114,27 +114,24 @@ func main() {
     } 
 
     
-    switch isoverdue {
+    // var args string
+    if isoverdue {
     // task 12 mod due:1d-4h wait:due-4h
-        case true:
-            args := []string{taskno, "mod", "due:" + Reptimes[reptime][0] + hoursToSix, Reptimes[reptime][1]}
-            fmt.Println("task", args)
-            cmd := exec.Command("task", args...)
-            output, err = cmd.Output()
-            if err != nil {
-                fmt.Println("\033[7;31merror:", err)          
-            }   
-            fmt.Println(string(output))
-        case false:
-            days := int(duedate.Sub(currentTime).Hours()/24)+1
-            args := []string{taskno, "mod", "due:" + Reptimes[reptime][0] + "+" + strconv.Itoa(days) + "d" + hoursToSix,Reptimes[reptime][1]}
-            fmt.Println("task", args)
-            cmd := exec.Command("task", args...)
-            output, err = cmd.Output()
-            if err != nil {
-                fmt.Println("\033[7;31merror:", err)          
-            }   
-            fmt.Println(string(output))
-        default:
+        args = []string{taskno, "mod", "due:" + Reptimes[reptime][0] + hoursToSix, Reptimes[reptime][1]}
+
+    } else {
+    // task 12 mod due:1d+14d-4h wait:due-4h
+        days := int(duedate.Sub(currentTime).Hours()/24)
+        args = []string{taskno, "mod", "due:" + Reptimes[reptime][0] + "+" + strconv.Itoa(days) + "d" + hoursToSix,Reptimes[reptime][1]}
+
     }
+
+    //execute
+    fmt.Println("task", args)
+    cmd = exec.Command("task", args...)
+    output, err = cmd.Output()
+    if err != nil {
+        fmt.Println("\033[7;31merror:", err)          
+    }   
+    fmt.Println(string(output))
 }
